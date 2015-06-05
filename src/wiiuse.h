@@ -783,7 +783,7 @@ typedef struct wiimote_t {
 
 	WCONST struct ir_t ir;					/**< IR data								*/
 
-	WCONST uint16_t btns;				/**< what buttons have just been pressed	*/
+	WCONST uint16_t btns;				/**< what buttons are down (just pressed or held). use IS_JUST_PRESSED to detect the first time they are pressed. */
 	WCONST uint16_t btns_held;		/**< what buttons are being held down		*/
 	WCONST uint16_t btns_released;	/**< what buttons were just released this	*/
 
