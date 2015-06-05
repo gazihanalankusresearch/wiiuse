@@ -151,6 +151,7 @@ void nunchuk_event(struct nunchuk_t* nc, byte* msg) {
 	nc->accel.x = msg[2];
 	nc->accel.y = msg[3];
 	nc->accel.z = msg[4];
+	nc->accel_received = 1;
 
 	calculate_orientation(&nc->accel_calib, &nc->accel, &nc->orient, NUNCHUK_IS_FLAG_SET(nc, WIIUSE_SMOOTHING));
 	calculate_gforce(&nc->accel_calib, &nc->accel, &nc->gforce);

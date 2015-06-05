@@ -159,6 +159,8 @@ void clear_dirty_reads(struct wiimote_t* wm) {
  *	@param msg		The message specified in the event packet.
  */
 static void handle_wm_accel(struct wiimote_t* wm, byte* msg) {
+	wm->accel_received = 1;
+
 	wm->accel.x = msg[2];
 	wm->accel.y = msg[3];
 	wm->accel.z = msg[4];
@@ -788,6 +790,8 @@ static void save_state(struct wiimote_t* wm) {
 	/* wiimote */
 	wm->lstate.btns = wm->btns;
 	wm->lstate.accel = wm->accel;
+	wm->accel_received = 0;
+	
 
 	/* ir */
 	if (WIIUSE_USING_IR(wm)) {
@@ -803,6 +807,7 @@ static void save_state(struct wiimote_t* wm) {
 			wm->lstate.exp_ljs_mag = wm->exp.nunchuk.js.mag;
 			wm->lstate.exp_btns = wm->exp.nunchuk.btns;
 			wm->lstate.exp_accel = wm->exp.nunchuk.accel;
+			wm->exp.nunchuk.accel_received = 0;
 			break;
 
 		case EXP_CLASSIC:
@@ -835,6 +840,7 @@ static void save_state(struct wiimote_t* wm) {
 				wm->lstate.drx = wm->exp.mp.raw_gyro.pitch;
 				wm->lstate.dry = wm->exp.mp.raw_gyro.roll;
 				wm->lstate.drz = wm->exp.mp.raw_gyro.yaw;
+				wm->exp.mp.raw_gyro_received = 0;
 
 				if (wm->exp.type == EXP_MOTION_PLUS_CLASSIC) {
 					wm->lstate.exp_ljs_ang = wm->exp.classic.ljs.ang;
@@ -849,6 +855,7 @@ static void save_state(struct wiimote_t* wm) {
 					wm->lstate.exp_ljs_mag = wm->exp.nunchuk.js.mag;
 					wm->lstate.exp_btns = wm->exp.nunchuk.btns;
 					wm->lstate.exp_accel = wm->exp.nunchuk.accel;
+					wm->exp.nunchuk.accel_received = 0;
 				}
 
 				break;

@@ -222,6 +222,7 @@ void motion_plus_event(struct motion_plus_t* mp, int exp_type, byte* msg) {
 		mp->raw_gyro.roll = ((msg[4] & 0xFC) << 6) | msg[1];
 		mp->raw_gyro.pitch = ((msg[5] & 0xFC) << 6) | msg[2];
 		mp->raw_gyro.yaw = ((msg[3] & 0xFC) << 6) | msg[0];
+		mp->raw_gyro_received = 1;
 
 		/* First calibration */
 		if ((mp->raw_gyro.roll > 5000) &&
@@ -255,6 +256,7 @@ void motion_plus_event(struct motion_plus_t* mp, int exp_type, byte* msg) {
 			mp->nc->accel.x = msg[2];
 			mp->nc->accel.y = msg[3];
 			mp->nc->accel.z = (msg[4] & 0xFE) | ((msg[5] >> 5) & 0x04);
+			mp->nc->accel_received = 1;
 
 			calculate_orientation(&(mp->nc->accel_calib),
 			                      &(mp->nc->accel),

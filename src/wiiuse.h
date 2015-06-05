@@ -534,6 +534,7 @@ typedef struct nunchuk_t {
 	float orient_threshold;			/**< threshold for orient to generate an event */
 	int accel_threshold;			/**< threshold for accel to generate an event */
 
+	byte accel_received;			/**< whether a new accelerometer reading received	*/
 	struct vec3b_t accel;			/**< current raw acceleration data			*/
 	struct orient_t orient;			/**< current orientation on each axis		*/
 	struct gforce_t gforce;			/**< current gravity forces on each axis	*/
@@ -576,6 +577,7 @@ typedef struct guitar_hero_3_t {
 typedef struct motion_plus_t {
 	byte ext;                           /**< is there a device on the pass-through port? */
 
+	byte raw_gyro_received;
 	struct ang3s_t raw_gyro;            /**< current raw gyroscope data */
 	struct ang3s_t cal_gyro;            /**< calibration raw gyroscope data */
 	struct ang3f_t angle_rate_gyro;     /**< current gyro angle rate */
@@ -777,6 +779,7 @@ typedef struct wiimote_t {
 	WCONST struct accel_t accel_calib;		/**< wiimote accelerometer calibration		*/
 	WCONST struct expansion_t exp;			/**< wiimote expansion device				*/
 
+	WCONST byte accel_received;				/**< whether a new accelerometer reading received	*/
 	WCONST struct vec3b_t accel;			/**< current raw acceleration data			*/
 	WCONST struct orient_t orient;			/**< current orientation on each axis		*/
 	WCONST struct gforce_t gforce;			/**< current gravity forces on each axis	*/
