@@ -22,6 +22,8 @@ option(BUILD_EXAMPLE "Should we build the example app?" YES)
 option(BUILD_EXAMPLE_SDL "Should we build the SDL-based example app?" YES)
 option(BUILD_WIIUSE_SHARED_LIB "Should we build as a shared library (dll/so)?" YES)
 option(INSTALL_EXAMPLES "Should we install the example apps?" YES)
+option(BUILD_SIMPLE "Should we build the simple library?" YES)
+option(BUILD_SIMPLE_EXAMPLE "Should we build the example app for the simple library?" YES)
 
 option(CPACK_MONOLITHIC_INSTALL "Only produce a single component installer, rather than multi-component." NO)
 
@@ -74,6 +76,15 @@ if(NOT SUBPROJECT)
 	if(BUILD_EXAMPLE_SDL)
 		add_subdirectory(example-sdl)
 	endif()
+
+	if(BUILD_SIMPLE)
+		add_subdirectory(wiiuse_simple)
+	endif()
+
+	if(BUILD_SIMPLE_EXAMPLE)
+		add_subdirectory(wiiuse_simple_example)
+	endif()
+
 endif()
 
 if(SUBPROJECT)
