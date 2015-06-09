@@ -33,12 +33,12 @@ int main(int argc, char** argv) {
 			fflush(0);
 			if (wus_accel_received(wmi))
 			{
-				wus_get_accel(wmi, accel);
+				wus_get_accel(wmi, accel + 0, accel + 1, accel + 2);
 				printf("\naccel: %f %f %f", accel[0], accel[1], accel[2]);
 			}
 			if (wus_gyro_received(wmi))
 			{
-				wus_get_gyro(wmi, gyro);
+				wus_get_gyro(wmi, gyro + 0, gyro + 1, gyro + 2);
 				printf("\ngyro: %f %f %f", gyro[0], gyro[1], gyro[2]);
 			}
 		}

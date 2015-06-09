@@ -135,11 +135,11 @@ int wus_accel_received(int wmi)
 	return wiimotes[wmi]->accel_received;
 }
 
-void wus_get_accel(int wmi, float *accel)
+void wus_get_accel(int wmi, float *x, float *y, float *z)
 {
-	accel[0] = wiimotes[wmi]->gforce.x;
-	accel[1] = wiimotes[wmi]->gforce.y;
-	accel[2] = wiimotes[wmi]->gforce.z;
+	*x = wiimotes[wmi]->gforce.x;
+	*y = wiimotes[wmi]->gforce.y;
+	*z = wiimotes[wmi]->gforce.z;
 }
 
 int wus_gyro_received(int wmi)
@@ -147,11 +147,11 @@ int wus_gyro_received(int wmi)
 	return wiimotes[wmi]->exp.mp.raw_gyro_received;
 }
 
-void wus_get_gyro(int wmi, float *gyro)
+void wus_get_gyro(int wmi, float *x, float *y, float *z)
 {
-	gyro[0] = wiimotes[wmi]->exp.mp.angle_rate_gyro.pitch;
-	gyro[1] = wiimotes[wmi]->exp.mp.angle_rate_gyro.yaw;
-	gyro[2] = wiimotes[wmi]->exp.mp.angle_rate_gyro.roll;
+	*x = wiimotes[wmi]->exp.mp.angle_rate_gyro.pitch;
+	*y = wiimotes[wmi]->exp.mp.angle_rate_gyro.yaw;
+	*z = wiimotes[wmi]->exp.mp.angle_rate_gyro.roll;
 }
 
 void wus_cleanup()
