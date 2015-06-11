@@ -235,9 +235,19 @@ void wiiuse_handshake(struct wiimote_t* wm, byte* data, uint16_t len) {
 		accel->cal_zero.y = buf[1];
 		accel->cal_zero.z = buf[2];
 
+
+		accel->cal_zero_precise.x = (buf[0] << 2) | ((buf[3] >> 4) & 0x03);
+		accel->cal_zero_precise.y = (buf[1] << 2) | ((buf[3] >> 2) & 0x03);
+		accel->cal_zero_precise.z = (buf[2] << 2) | (buf[3] & 0x03);
+
+		/* is this subtraction really necessary? probably, but try without it, too.*/
 		accel->cal_g.x = buf[4] - accel->cal_zero.x;
 		accel->cal_g.y = buf[5] - accel->cal_zero.y;
 		accel->cal_g.z = buf[6] - accel->cal_zero.z;
+
+		accel->cal_g_precise.x = ((buf[4] << 2) | ((buf[7] >> 4) & 0x03)) - accel->cal_zero_precise.x;
+		accel->cal_g_precise.y = ((buf[5] << 2) | ((buf[7] >> 2) & 0x03)) - accel->cal_zero_precise.y;
+		accel->cal_g_precise.z = ((buf[6] << 2) | (buf[7] & 0x03)) - accel->cal_zero_precise.z;
 
 		WIIUSE_DEBUG("Calibrated wiimote acc\n");
 	}
@@ -266,6 +276,7 @@ static void wiiuse_disable_motion_plus1(struct wiimote_t *wm, byte *data, unsign
 static void wiiuse_disable_motion_plus2(struct wiimote_t *wm, byte *data, unsigned short len);
 
 void wiiuse_handshake(struct wiimote_t* wm, byte* data, uint16_t len) {
+	exit(1);
 	if (!wm)	{
 		return;
 	}

@@ -137,9 +137,9 @@ int wus_accel_received(int wmi)
 
 void wus_get_accel(int wmi, float *x, float *y, float *z)
 {
-	*x = wiimotes[wmi]->gforce.x;
-	*y = wiimotes[wmi]->gforce.y;
-	*z = wiimotes[wmi]->gforce.z;
+	*x = wiimotes[wmi]->gforce_precise.x;
+	*y = wiimotes[wmi]->gforce_precise.y;
+	*z = wiimotes[wmi]->gforce_precise.z;
 }
 
 int wus_gyro_received(int wmi)

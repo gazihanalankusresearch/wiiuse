@@ -217,6 +217,7 @@ void motion_plus_event(struct motion_plus_t* mp, int exp_type, byte* msg) {
 
 	if (mp->ext == 0 || isMPFrame) { /* reading gyro frame */
 		/* Check if the gyroscope is in fast or slow mode (0 if rotating fast, 1 if slow or still) */
+		/* mode bits are roll-pitch-yaw */
 		mp->acc_mode = ((msg[4] & 0x2) << 1) | ((msg[3] & 0x1) << 1) | ((msg[3] & 0x2) >> 1);
 
 		mp->raw_gyro.roll = ((msg[4] & 0xFC) << 6) | msg[1];
@@ -234,6 +235,7 @@ void motion_plus_event(struct motion_plus_t* mp, int exp_type, byte* msg) {
 		        !(mp->cal_gyro.roll) &&
 		        !(mp->cal_gyro.pitch) &&
 		        !(mp->cal_gyro.yaw)) {
+			/* simply use the current values as zero for calculated orientation, nothing else. */
 			wiiuse_calibrate_motion_plus(mp);
 		}
 
@@ -296,35 +298,46 @@ void wiiuse_calibrate_motion_plus(struct motion_plus_t *mp) {
 	mp->orient.yaw = 0.0;
 }
 
+float slowModeGyroFactor = (float)(595.0 / 8192.0);
+float fastModeGyroFactor = (float)((2000.0 * 595.0) / (8192.0 * 440.0));
+
 static void calculate_gyro_rates(struct motion_plus_t* mp) {
 	short int tmp_r, tmp_p, tmp_y;
 	float tmp_roll, tmp_pitch, tmp_yaw;
 
 	/* We consider calibration data */
+	/* I removed it because I think calibration is not necessary.
+	brought it back because it seems I was wrong */
 	tmp_r = mp->raw_gyro.roll - mp->cal_gyro.roll;
 	tmp_p = mp->raw_gyro.pitch - mp->cal_gyro.pitch;
 	tmp_y = mp->raw_gyro.yaw - mp->cal_gyro.yaw;
-
+	
+	/*
+	tmp_r = mp->raw_gyro.roll;
+	tmp_p = mp->raw_gyro.pitch;
+	tmp_y = mp->raw_gyro.yaw;
+	*/
 	/* We convert to degree/sec according to fast/slow mode */
 	if (mp->acc_mode & 0x04) {
-		tmp_roll = (float)tmp_r / 20.0f;
+		tmp_roll = (float)tmp_r * slowModeGyroFactor;
 	} else {
-		tmp_roll = (float)tmp_r / 4.0f;
+		tmp_roll = (float)tmp_r * fastModeGyroFactor;
 	}
 
 	if (mp->acc_mode & 0x02) {
-		tmp_pitch = (float)tmp_p / 20.0f;
+		tmp_pitch = (float)tmp_p * slowModeGyroFactor;
 	} else {
-		tmp_pitch = (float)tmp_p / 4.0f;
+		tmp_pitch = (float)tmp_p * fastModeGyroFactor;
 	}
 
 	if (mp->acc_mode & 0x01) {
-		tmp_yaw = (float)tmp_y / 20.0f;
+		tmp_yaw = (float)tmp_y * slowModeGyroFactor;
 	} else {
-		tmp_yaw = (float)tmp_y / 4.0f;
+		tmp_yaw = (float)tmp_y * fastModeGyroFactor;
 	}
 
 	/* Simple filtering */
+	/* give me everything, please. don't filter.
 	if (fabs(tmp_roll) < 0.5f) {
 		tmp_roll = 0.0f;
 	}
@@ -334,6 +347,7 @@ static void calculate_gyro_rates(struct motion_plus_t* mp) {
 	if (fabs(tmp_yaw) < 0.5f) {
 		tmp_yaw = 0.0f;
 	}
+	*/
 
 	mp->angle_rate_gyro.roll = tmp_roll;
 	mp->angle_rate_gyro.pitch = tmp_pitch;

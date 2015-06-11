@@ -388,11 +388,18 @@ typedef struct vec2b_t {
 
 
 /**
- *	@brief Unsigned x,y,z byte vector.
- */
+*	@brief Unsigned x,y,z byte vector.
+*/
 typedef struct vec3b_t {
 	byte x, y, z;
 } vec3b_t;
+
+/**
+*	@brief Signed x,y,z int16 vector.
+*/
+typedef struct vec3_16_t {
+	int16_t x, y, z;
+} vec3_16_t;
 
 
 /**
@@ -432,6 +439,8 @@ typedef struct gforce_t {
 typedef struct accel_t {
 	struct vec3b_t cal_zero;		/**< zero calibration					*/
 	struct vec3b_t cal_g;			/**< 1g difference around 0cal			*/
+	struct vec3_16_t cal_zero_precise;		/**< zero calibration					*/
+	struct vec3_16_t cal_g_precise;			/**< 1g difference around 0cal			*/
 
 	float st_roll;					/**< last smoothed roll value			*/
 	float st_pitch;					/**< last smoothed roll pitch			*/
@@ -781,8 +790,10 @@ typedef struct wiimote_t {
 
 	WCONST byte accel_received;				/**< whether a new accelerometer reading received	*/
 	WCONST struct vec3b_t accel;			/**< current raw acceleration data			*/
+	WCONST struct vec3_16_t accel_precise;	/**< current raw acceleration data with extra precision	*/
 	WCONST struct orient_t orient;			/**< current orientation on each axis		*/
 	WCONST struct gforce_t gforce;			/**< current gravity forces on each axis	*/
+	WCONST struct gforce_t gforce_precise;	/**< current gravity forces on each axis	*/
 
 	WCONST struct ir_t ir;					/**< IR data								*/
 

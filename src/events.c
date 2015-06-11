@@ -165,11 +165,17 @@ static void handle_wm_accel(struct wiimote_t* wm, byte* msg) {
 	wm->accel.y = msg[3];
 	wm->accel.z = msg[4];
 
+	wm->accel_precise.x = (msg[2] << 2) | ((msg[0] >> 5) & 0x03);
+	wm->accel_precise.y = (msg[3] << 2) | ((msg[1] >> 4) & 0x02);
+	wm->accel_precise.z = (msg[4] << 2) | ((msg[1] >> 5) & 0x02);
+
 	/* calculate the remote orientation */
 	calculate_orientation(&wm->accel_calib, &wm->accel, &wm->orient, WIIMOTE_IS_FLAG_SET(wm, WIIUSE_SMOOTHING));
 
 	/* calculate the gforces on each axis */
 	calculate_gforce(&wm->accel_calib, &wm->accel, &wm->gforce);
+
+	calculate_gforce_precise(&wm->accel_calib, &wm->accel_precise, &wm->gforce_precise);
 }
 
 
@@ -185,6 +191,7 @@ static void handle_wm_accel(struct wiimote_t* wm, byte* msg) {
 void propagate_event(struct wiimote_t* wm, byte event, byte* msg) {
 	save_state(wm);
 
+	int shouldReport = 1;
 	switch (event) {
 		case WM_RPT_BTN: {
 				/* button */
@@ -269,15 +276,24 @@ void propagate_event(struct wiimote_t* wm, byte event, byte* msg) {
 				break;
 			}
 		default: {
+				shouldReport = 0;
+
 				WIIUSE_WARNING("Unknown event, can not handle it [Code 0x%x].", event);
 				return;
 			}
 	}
 
+	if (shouldReport)
+	{
+		wm->event = WIIUSE_EVENT;
+	}
+
 	/* was there an event? */
+	/*
 	if (state_changed(wm)) {
 		wm->event = WIIUSE_EVENT;
 	}
+	*/
 }
 
 

@@ -49,6 +49,7 @@ extern "C" {
 
 	void calculate_orientation(struct accel_t* ac, struct vec3b_t* accel, struct orient_t* orient, int smooth);
 	void calculate_gforce(struct accel_t* ac, struct vec3b_t* accel, struct gforce_t* gforce);
+	void calculate_gforce_precise(struct accel_t* ac, struct vec3_16_t* accel, struct gforce_t* gforce);
 	void calc_joystick_state(struct joystick_t* js, float x, float y);
 	void apply_smoothing(struct accel_t* ac, struct orient_t* orient, int type);
 	/** @} */

@@ -139,6 +139,21 @@ void calculate_gforce(struct accel_t* ac, struct vec3b_t* accel, struct gforce_t
 	gforce->z = ((float)accel->z - (float)ac->cal_zero.z) / zg;
 }
 
+void calculate_gforce_precise(struct accel_t* ac, struct vec3_16_t* accel, struct gforce_t* gforce) {
+	float xg, yg, zg;
+
+	/* find out how much it has to move to be 1g */
+	xg = (float)ac->cal_g_precise.x;
+	yg = (float)ac->cal_g_precise.y;
+	zg = (float)ac->cal_g_precise.z;
+
+	/* find out how much it actually moved and normalize to +/- 1g */
+	gforce->x = ((float)(accel->x - ac->cal_zero_precise.x)) / xg;
+	gforce->y = ((float)(accel->y - ac->cal_zero_precise.y)) / yg;
+	gforce->z = ((float)(accel->z - ac->cal_zero_precise.z)) / zg;
+}
+
+
 static float applyCalibration(float inval, float minval, float maxval, float centerval) {
 	float ret;
 	/* We don't use the exact ranges but the ranges + 1 in case we get bad calibration data - avoid div0 */

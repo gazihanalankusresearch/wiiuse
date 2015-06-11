@@ -468,6 +468,19 @@ int main(int argc, char** argv) {
 	wiiuse_rumble(wiimotes[0], 0);
 	wiiuse_rumble(wiimotes[1], 0);
 
+
+#ifndef WIIUSE_WIN32
+	usleep(10000000);
+#else
+	Sleep(10000);
+#endif
+
+
+	wiiuse_poll(wiimotes, MAX_WIIMOTES);
+		
+	wiiuse_set_motion_plus(wiimotes[0], 1);
+	wiiuse_set_motion_plus(wiimotes[0], 1);
+
 	printf("\nControls:\n");
 	printf("\tB toggles rumble.\n");
 	printf("\t+ to start Wiimote accelerometer reporting, - to stop\n");
